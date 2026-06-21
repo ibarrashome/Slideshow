@@ -1,4 +1,4 @@
-name: Generate images.json automatically
+name: Generate images.json for GitHub Pages
 
 on:
   push:
@@ -9,10 +9,10 @@ on:
       - "*.jpeg"
       - "*.png"
       - "*.gif"
-  workflow_dispatch:
+      - ".github/workflows/generate-images-json.yml"
 
 jobs:
-  build:
+  build-json:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,7 +30,7 @@ jobs:
               else
                 echo "," >> images.json
               fi
-              echo "  \"https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/main/$file\"" >> images.json
+              echo "  \"https://ibarrashome.github.io/Slideshow/$file\"" >> images.json
             fi
           done
           echo "]" >> images.json
@@ -41,5 +41,4 @@ jobs:
           git config --global user.email "action@github.com"
           git add images.json
           git commit -m "Auto-update images.json" || echo "No changes to commit"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git
-
+          git push
